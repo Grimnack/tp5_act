@@ -1,0 +1,32 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+
+% Title Page
+\title{ACT - TP Heuristique}
+\author{Matthieu Caron & Armand Bour}
+
+
+\begin{document}
+\maketitle
+
+\section{Certificat et validation}
+
+\paragraph{Question 1}
+On décide de représenter le certificat par une liste de parts, une part serait représentée par 
+un quadruplet (x,y,largeur,hauteur), avec x et y les coordonnées de la case (0,0) de la part.
+
+\paragraph{Question 2}
+On considère que dans le pire des cas chaque case du tableau pizza est une part, dans ce cas la taille du certificat
+serait en $O(sizeof(int)*4*l*h)$.
+
+\paragraph{Question 4}
+La complexité de l'algorithme de solution est en $O(2*h*l)$ puisqu'on fait une matrice de bool, pour savoir si la case de la pizza est déjà prise,
+et on parcours toute la matrice (pizza) en suite.
+
+\paragraph{Question 5}
+On a donc un certificat qui peut être vérifié en temps polynomial du problème, on peut donc dire que le problème de la découpe de pizza est dans NP.
+
+\begin{abstract}
+\end{abstract}
+
+\end{document}          

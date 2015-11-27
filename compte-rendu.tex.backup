@@ -1,0 +1,25 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage[utf8]{inputenc}
+
+% Title Page
+\title{ACT - TP Heuristique}
+\author{Matthieu Caron & Armand Bour}
+
+
+\begin{document}
+\maketitle
+
+\section{Certificat et validation}
+
+\paragraph{Question 1}
+On décide de représenter le certificat par une liste de parts, une part serait représentée par 
+un quadruplet (x,y,largeur,hauteur), avec x et y les coordonnées de la case (0,0) de la part.
+
+\paragraph{Question 2}
+On considère que dans le pire des cas chaque case du tableau pizza est une part, dans ce cas la taille du certificat
+serait en $O(sizeof(int)*4*l*h)$.
+
+\begin{abstract}
+\end{abstract}
+
+\end{document}          
