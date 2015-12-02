@@ -1,3 +1,5 @@
+import random as r
+
 class CertificatPizza(object):
     """docstring for CertificatPizza"""
     def __init__(self, listePart):
@@ -23,7 +25,7 @@ class PizzaProbleme(object):
         self.n = nbJambon
 
 
-    def certificatCorrecte(CertificatPizza) :
+    def certificatCorrecte(self,CertificatPizza) :
         """Complexité de l'algorithme en O(2*h*l)"""
         matriceBool = []
         for ligne in self.matrice: 
@@ -43,5 +45,33 @@ class PizzaProbleme(object):
             if cptJambon < self.n : 
                 return False
         return True
+
+    def toutesLesParts(self) :
+        """Génération de toutesLesParts
+        parcours la pizza et a chaque point,
+        crée les parts possibles depuis ce point"""
+        lesParts = []
+        for y in range(self.matrice) :
+            for x in range(self.matrice[0]) :
+                lesDiviseurs = []
+                for i in xrange(1,self.tailleMaxPart + 1) :
+                    if tailleMaxPart % i == 0 :
+                        lesDiviseurs.append(i)
+                for diviseur in lesDiviseurs :
+                    for yP in range(diviseur) :
+                        cptJambon = 0
+                        for xP in range(tailleMaxPart/diviseur) :
+                            if self.matrice[y+yP][x + xP] == 'H' :
+                                cptJambon = cptJambon + 1
+                            if cptJambon >= self.n :
+                                lesParts.append(Part((x+xP),(y+yP),(tailleMaxPart/diviseur),diviseur))
+        return lesParts
+
+    def solutionAlea(self, liste):
+        r.shuffle(liste)
+        for part in liste :
+            
+
+
 
                         
