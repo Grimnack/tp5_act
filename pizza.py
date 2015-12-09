@@ -26,7 +26,9 @@ class PizzaProbleme(object):
 
 
     def certificatCorrecte(self,CertificatPizza) :
-        """Complexité de l'algorithme en O(2*h*l)"""
+        """Complexité de l'algorithme en O(2*h*l)
+            pour le moment ne verifie pas si ça sort de la pizza
+        """
         matriceBool = []
         for ligne in self.matrice: 
             matriceBool.append([False]*len(self.matrice[0]))              
@@ -99,15 +101,17 @@ class PizzaProbleme(object):
         return cpt
 
     def genereFichierSolution(self, listePart):
-        pass        
+        return True
             
 
 
 
 
 
-def creer pizzaDepuisFichier(filename) :
-    pass
+def creerPizzaDepuisFichier(filename) :
+    source = open(file, 'r')
+    lignes = source.readline()
+    
 
 
                         
