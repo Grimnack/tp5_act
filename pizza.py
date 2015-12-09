@@ -36,11 +36,11 @@ class PizzaProbleme(object):
                 return False 
             for l in range(part.largeur) : 
                 for h in range(part.hauteur): 
-                    if matriceBool[part.y + hauteur][part.x + largeur] 
+                    if matriceBool[part.y + h][part.x + l] :
                         return False
                     else :
-                        matriceBool[part.y + hauteur][part.x + largeur] = True 
-                        if self.matrice[part.y + hauteur][part.x + largeur] == 'H' : 
+                        matriceBool[part.y + h][part.x + l] = True 
+                        if self.matrice[part.y + h][part.x + l] == 'H' : 
                             cptJambon = cptJambon + 1 
             if cptJambon < self.n : 
                 return False
@@ -51,12 +51,12 @@ class PizzaProbleme(object):
         parcours la pizza et a chaque point,
         crée les parts possibles depuis ce point"""
         lesParts = []
+        lesDiviseurs = []
+        for i in xrange(1,self.tailleMaxPart) :
+            if tailleMaxPart % i == 0 :
+                lesDiviseurs.append(i)
         for y in range(self.matrice) :
             for x in range(self.matrice[0]) :
-                lesDiviseurs = []
-                for i in xrange(1,self.tailleMaxPart + 1) :
-                    if tailleMaxPart % i == 0 :
-                        lesDiviseurs.append(i)
                 for diviseur in lesDiviseurs :
                     for yP in range(diviseur) :
                         cptJambon = 0
@@ -67,11 +67,47 @@ class PizzaProbleme(object):
                                 lesParts.append(Part((x+xP),(y+yP),(tailleMaxPart/diviseur),diviseur))
         return lesParts
 
+
     def solutionAlea(self, liste):
+        '''
+        solution de la question 3.1.2
+        '''
+        listePart = []
         r.shuffle(liste)
+        matriceBool = []
+        for ligne in self.matrice: 
+            matriceBool.append([False]*len(self.matrice[0]))
         for part in liste :
+            peutCouper = True
+            for x in range(part.largeur) :
+                for y in xrange(part.hauteur) :
+                    if matriceBool[y+part.y][x+part.x] :
+                        peutCouper = False
+                if peutCouper :
+                    for x in range(part.largeur) :
+                        for y in xrange(part.hauteur) :
+                            matriceBool[y+part.y][x+part.x] = True
+                    listePart.append(part)
+        return (listePart, matriceBool)
+
+    def score(self,matriceBool):
+        cpt = 0
+        for ligne in matriceBool :
+            for case in ligne :
+                if case :
+                    cpt = cpt + 1
+        return cpt
+
+    def genereFichierSolution(self, listePart):
+        pass        
             
 
+
+
+
+
+def creer pizzaDepuisFichier(filename) :
+    pass
 
 
                         
