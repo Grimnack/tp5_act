@@ -59,6 +59,7 @@ class PizzaProbleme(object):
         lesDimensions = []
         largeur = len(self.matrice[0])
         hauteur = len(self.matrice)
+        test = True
         for i in range(self.c+1) :
             for j in range(self.c+1) :
                 if self.n <= i * j <= self.c :
@@ -107,9 +108,6 @@ class PizzaProbleme(object):
                 if case :
                     cpt = cpt + 1
         return cpt
-
-    def genereFichierSolution(self, listePart):
-        return True
             
 
 
@@ -117,8 +115,23 @@ class PizzaProbleme(object):
 
 
 def creerPizzaDepuisFichier(filename) :
-    source = open(file, 'r')
-    lignes = source.readline()
+    f = open(filename, 'r')
+    premiereLigne = True
+    matrice = []
+    c = 12
+    n = 3
+    for ligne in f :
+        line = []
+        if premiereLigne :
+            #je vais faire un truc degueux car une seule instance du probleme
+            premiereLigne = False
+        else :
+            for char in ligne :
+                if char != '\n' :
+                    line.append(char)
+        if line != [] :
+            matrice.append(line)
+    return PizzaProbleme(matrice,c,n)
 
 
 matricePizza = [['T','T','T','T','T'],['T','H','H','H','T'],['T','T','T','T','T']]
@@ -129,3 +142,10 @@ part3 = Part(3,0,2,3)
 certificat = CertificatPizza([part1,part2,part3])
 # print "test certificatCorrecte : ", petitePizza.certificatCorrecte(certificat)
 print "test toutesLesParts, ", len(petitePizza.toutesLesParts())
+grossePizza = creerPizzaDepuisFichier('data.in')
+# print grossePizza.matrice
+print len(grossePizza.matrice)
+print len(grossePizza.matrice[1])
+# print grossePizza.c
+# print grossePizza.n
+print "test toutesLesParts, ", len(grossePizza.toutesLesParts())
