@@ -99,7 +99,7 @@ class PizzaProbleme(object):
                         for y in xrange(part.hauteur) :
                             matriceBool[y+part.y][x+part.x] = True
                     listePart.append(part)
-        return (listePart, matriceBool)
+        return (listePart, self.score(matriceBool))
 
     def score(self,matriceBool):
         cpt = 0
@@ -108,8 +108,27 @@ class PizzaProbleme(object):
                 if case :
                     cpt = cpt + 1
         return cpt
-            
 
+    def ecritSolution(self, listePart) :
+        fichier = open('resultat.out','w')
+        fichier.write(str(len(listePart))+'\n')
+        for part in listePart :
+            chaine = str(part.y) + ' ' + str(part.x) + ' ' + str(part.y + part.hauteur - 1) + ' ' + str(part.x + part.largeur - 1) + '\n'
+            fichier.write(chaine)
+        fichier.close()
+
+            
+    def aleaIteration(self,listePart, iteration) :
+        bestScore = 0
+        bestListePart = []
+        for i in range(iteration) :
+            print i
+            (newListePart,score) = self.solutionAlea(listePart)
+            if score > bestScore :
+                bestScore = score
+                bestListePart = newListePart
+        self.ecritSolution(bestListePart)
+        print 'score : ', score
 
 
 
@@ -131,21 +150,13 @@ def creerPizzaDepuisFichier(filename) :
                     line.append(char)
         if line != [] :
             matrice.append(line)
+    f.close()
     return PizzaProbleme(matrice,c,n)
 
 
-matricePizza = [['T','T','T','T','T'],['T','H','H','H','T'],['T','T','T','T','T']]
-petitePizza = PizzaProbleme(matricePizza,6,1)
-part1 = Part(0,0,2,3) 
-part2 = Part(2,0,1,3)
-part3 = Part(3,0,2,3)
-certificat = CertificatPizza([part1,part2,part3])
-# print "test certificatCorrecte : ", petitePizza.certificatCorrecte(certificat)
-print "test toutesLesParts, ", len(petitePizza.toutesLesParts())
 grossePizza = creerPizzaDepuisFichier('data.in')
-# print grossePizza.matrice
-print len(grossePizza.matrice)
-print len(grossePizza.matrice[1])
-# print grossePizza.c
-# print grossePizza.n
-print "test toutesLesParts, ", len(grossePizza.toutesLesParts())
+toutesLesParts = grossePizza.toutesLesParts()
+print "test toutesLesParts, ", len(toutesLesParts)
+# (listePart , score) = grossePizza.solutionAlea(toutesLesParts)
+# print 'score : ', score
+grossePizza.aleaIteration(toutesLesParts,1000)
