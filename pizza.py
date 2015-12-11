@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import random as r
 
 class CertificatPizza(object):
@@ -25,14 +28,14 @@ class PizzaProbleme(object):
         self.n = nbJambon
 
 
-    def certificatCorrecte(self,CertificatPizza) :
+    def certificatCorrecte(self,certificatPizza) :
         """Complexité de l'algorithme en O(2*h*l)
             pour le moment ne verifie pas si ça sort de la pizza
         """
         matriceBool = []
         for ligne in self.matrice: 
             matriceBool.append([False]*len(self.matrice[0]))              
-        for part in CertificatPizza : 
+        for part in  certificatPizza.listePart: 
             cptJambon = 0
             if part.largeur * part.hauteur > self.c :
                 return False 
@@ -53,20 +56,24 @@ class PizzaProbleme(object):
         parcours la pizza et a chaque point,
         crée les parts possibles depuis ce point"""
         lesParts = []
-        lesDiviseurs = []
-        for i in xrange(1,self.tailleMaxPart) :
-            if tailleMaxPart % i == 0 :
-                lesDiviseurs.append(i)
-        for y in range(self.matrice) :
-            for x in range(self.matrice[0]) :
-                for diviseur in lesDiviseurs :
-                    for yP in range(diviseur) :
-                        cptJambon = 0
-                        for xP in range(tailleMaxPart/diviseur) :
-                            if self.matrice[y+yP][x + xP] == 'H' :
-                                cptJambon = cptJambon + 1
-                            if cptJambon >= self.n :
-                                lesParts.append(Part((x+xP),(y+yP),(tailleMaxPart/diviseur),diviseur))
+        lesDimensions = []
+        largeur = len(self.matrice[0])
+        hauteur = len(self.matrice)
+        for i in range(self.c+1) :
+            for j in range(self.c+1) :
+                if self.n <= i * j <= self.c :
+                    lesDimensions.append((i,j))
+        for y in range(hauteur) :
+            for x in range(largeur) :
+                for (i,j) in lesDimensions :
+                    cptJambon = 0 
+                    if not (((y + j - 1) >= hauteur) or ((x + i - 1) >= largeur) ):
+                        for xi in range(i) :
+                            for yj in range(j):
+                                if self.matrice[y+yj][x+xi] == 'H' :
+                                    cptJambon += 1
+                        if cptJambon >= self.n :
+                            lesParts.append(Part(x,y,i,j))
         return lesParts
 
 
@@ -77,6 +84,7 @@ class PizzaProbleme(object):
         listePart = []
         r.shuffle(liste)
         matriceBool = []
+        #Matrice des déjà pris
         for ligne in self.matrice: 
             matriceBool.append([False]*len(self.matrice[0]))
         for part in liste :
@@ -111,7 +119,13 @@ class PizzaProbleme(object):
 def creerPizzaDepuisFichier(filename) :
     source = open(file, 'r')
     lignes = source.readline()
-    
 
 
-                        
+matricePizza = [['T','T','T','T','T'],['T','H','H','H','T'],['T','T','T','T','T']]
+petitePizza = PizzaProbleme(matricePizza,6,1)
+part1 = Part(0,0,2,3) 
+part2 = Part(2,0,1,3)
+part3 = Part(3,0,2,3)
+certificat = CertificatPizza([part1,part2,part3])
+# print "test certificatCorrecte : ", petitePizza.certificatCorrecte(certificat)
+print "test toutesLesParts, ", len(petitePizza.toutesLesParts())
