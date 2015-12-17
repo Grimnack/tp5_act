@@ -130,6 +130,43 @@ class PizzaProbleme(object):
         self.ecritSolution(bestListePart)
         print 'score : ', score
 
+    def separerListePosition(self,listePart) :
+        '''transforme une liste de parts en liste de liste par position'''
+        matriceLists = []
+        for ligne in self.matrice:
+            matriceLists.append([[]]*len(self.matrice[0]))
+        for part in listePart :
+            matriceLists[part.y][part.x].append(part)
+        for ligne in matriceLists :
+            for liste in ligne :
+                r.shuffle(liste)
+        return matriceLists 
+
+    def solutionGlouton(self,listePart) :
+        '''parcourir toute la pizza et deposer une a une les parts'''
+        matriceLists = self.separerListePosition(listePart)
+        matriceBool = []
+        listeFinale = []
+        #Matrice des déjà pris
+        for ligne in self.matrice: 
+            matriceBool.append([False]*len(self.matrice[0]))
+        for ligne in matriceLists :
+            for liste in ligne :
+                if liste != [] :
+                    part = liste[0] #pas necessaire mais c est pour la lecture
+                    peutCouper = True
+                    for x in range(part.largeur) :
+                        for y in range(part.hauteur) :
+                            if matriceBool[part.y + y][part.x + x] :
+                                peutCouper = False
+                    if peutCouper :
+                        for x in range(part.largeur) :
+                            for y in xrange(part.hauteur) :
+                                matriceBool[y+part.y][x+part.x] = True
+                        listeFinale.append(part)
+        print len(listeFinale)
+        return (listeFinale,self.score(matriceBool))
+
 
 
 
@@ -159,4 +196,7 @@ toutesLesParts = grossePizza.toutesLesParts()
 print "test toutesLesParts, ", len(toutesLesParts)
 # (listePart , score) = grossePizza.solutionAlea(toutesLesParts)
 # print 'score : ', score
-grossePizza.aleaIteration(toutesLesParts,1000)
+# grossePizza.aleaIteration(toutesLesParts,1000)
+(listePart,score) = grossePizza.solutionGlouton(toutesLesParts)
+print 'score : ', score
+grossePizza.ecritSolution(toutesLesParts)
