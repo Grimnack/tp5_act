@@ -190,10 +190,20 @@ def comparateur2(part1,part2):
     else :
         return 0
 
-def comparateur3(part):
+def comparateur3(part1,part2):
     taille1 = part1.largeur * part1.hauteur
     taille2 = part2.largeur * part2.hauteur
-    
+    if taille1 > taille2 :
+        return -1
+    elif taille2 > taille1 :
+        return 1
+    else :
+        if part1.nbJambon < part2.nbJambon :
+            return -1
+        elif part1.nbJambon > part2.nbJambon :
+            return 1
+        else :
+            return 0
 
 def creerPizzaDepuisFichier(filename) :
     f = open(filename, 'r')
@@ -228,3 +238,5 @@ print 'score glouton simple: ', score
 (listePart,score) = grossePizza.solutionGlouton(toutesLesParts,comparateur2)
 print 'score glouton perso: ', score
 
+(listePart,score) = grossePizza.solutionGlouton(toutesLesParts,comparateur3)
+print 'score glouton perso 2: ', score
