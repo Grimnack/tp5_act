@@ -3,6 +3,7 @@
 
 import random as r
 
+
 class CertificatPizza(object):
     """docstring for CertificatPizza"""
     def __init__(self, listePart):
@@ -11,12 +12,13 @@ class CertificatPizza(object):
 
 class Part(object):
     """Objet part de pizza"""
-    def __init__(self, x, y, largeur, hauteur):
+    def __init__(self, x, y, largeur, hauteur, nbJambon=-1):
         super(Part, self).__init__()
         self.x = x
         self.y = y
         self.largeur = largeur
         self.hauteur = hauteur
+        self.nbJambon = nbJambon
 
         
 class PizzaProbleme(object):
@@ -74,7 +76,7 @@ class PizzaProbleme(object):
                                 if self.matrice[y+yj][x+xi] == 'H' :
                                     cptJambon += 1
                         if cptJambon >= self.n :
-                            lesParts.append(Part(x,y,i,j))
+                            lesParts.append(Part(x,y,i,j,cptJambon))
         return lesParts
 
 
@@ -142,33 +144,56 @@ class PizzaProbleme(object):
                 r.shuffle(liste)
         return matriceLists 
 
-    def solutionGlouton(self,listePart) :
+
+    def solutionGlouton(self,listePart,comparateur) :
         '''parcourir toute la pizza et deposer une a une les parts'''
-        matriceLists = self.separerListePosition(listePart)
-        matriceBool = []
+        r.shuffle(listePart)
+        listePart.sort(cmp=comparateur)
         listeFinale = []
+        matriceBool = []
         #Matrice des déjà pris
         for ligne in self.matrice: 
             matriceBool.append([False]*len(self.matrice[0]))
-        for ligne in matriceLists :
-            for liste in ligne :
-                if liste != [] :
-                    part = liste[0] #pas necessaire mais c est pour la lecture
-                    peutCouper = True
-                    for x in range(part.largeur) :
-                        for y in range(part.hauteur) :
-                            if matriceBool[part.y + y][part.x + x] :
-                                peutCouper = False
-                    if peutCouper :
-                        for x in range(part.largeur) :
-                            for y in xrange(part.hauteur) :
-                                matriceBool[y+part.y][x+part.x] = True
-                        listeFinale.append(part)
+        for part in listePart :
+            peutCouper = True
+            for x in range(part.largeur) :
+                for y in range(part.hauteur) :
+                    if matriceBool[part.y + y][part.x + x] :
+                        peutCouper = False
+            if peutCouper :
+                for x in range(part.largeur) :
+                    for y in xrange(part.hauteur) :
+                        matriceBool[y+part.y][x+part.x] = True
+                listeFinale.append(part)
         print len(listeFinale)
         return (listeFinale,self.score(matriceBool))
 
+def comparateur(part1, part2):
+    if part1.y > part2.y :
+        return -1
+    elif part1.y < part2.y :
+        return 1
+    elif part1.x > part2.x :
+        return -1
+    elif part1.x < part2.x :
+        return 1
+    else :
+        return 0
 
+def comparateur2(part1,part2):
+    taille1 = part1.largeur * part1.hauteur
+    taille2 = part2.largeur * part2.hauteur
+    if taille1/part1.nbJambon > taille2/part2.nbJambon :
+        return -1
+    elif taille1/part1.nbJambon < taille2/part2.nbJambon :
+        return 1
+    else :
+        return 0
 
+def comparateur3(part):
+    taille1 = part1.largeur * part1.hauteur
+    taille2 = part2.largeur * part2.hauteur
+    
 
 def creerPizzaDepuisFichier(filename) :
     f = open(filename, 'r')
@@ -194,9 +219,12 @@ def creerPizzaDepuisFichier(filename) :
 grossePizza = creerPizzaDepuisFichier('data.in')
 toutesLesParts = grossePizza.toutesLesParts()
 print "test toutesLesParts, ", len(toutesLesParts)
-# (listePart , score) = grossePizza.solutionAlea(toutesLesParts)
-# print 'score : ', score
+(listePart , score) = grossePizza.solutionAlea(toutesLesParts)
+print 'score random: ', score
 # grossePizza.aleaIteration(toutesLesParts,1000)
-(listePart,score) = grossePizza.solutionGlouton(toutesLesParts)
-print 'score : ', score
-grossePizza.ecritSolution(toutesLesParts)
+(listePart,score) = grossePizza.solutionGlouton(toutesLesParts,comparateur)
+print 'score glouton simple: ', score
+
+(listePart,score) = grossePizza.solutionGlouton(toutesLesParts,comparateur2)
+print 'score glouton perso: ', score
+
